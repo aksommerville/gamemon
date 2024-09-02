@@ -11,6 +11,35 @@ Initially I'm going to use the TinyCircuits TinyArcade as monitors.
 I plan eventually to support Pimoroni PicoSystem, TinyCircuits Thumby, Playdate, Thumby 2, and Pocuter PocketStar.
 If you have a similar tiny programmable screen-and-buttons thing that you'd like supported, buy me one and I'll port to it.
 
+## TODO
+
+- [ ] lib should support auto-scaling. Devices have wildly different framebuffer sizes, and it should all just work.
+- [ ] Build host side for MacOS, confirm it works there too.
+- [x] Pico -- just barely works, must keep very low bandwidth
+- xxx Thumby, should be about the same as Pico. ...now that I think about it, a 72x40 black and white screen just isn't going to be useful. Forget it.
+- [ ] Playdate
+- [ ] Onboard my existing games.
+- - [x] Full Moon
+- - [ ] Plunder Squad
+- - [ ] Sitter 2009
+- - [ ] Campaign Trail of the Mummy
+- - [ ] Ivan Denisovich
+- - [ ] Pocket Orchestra
+- - [ ] Lil Sitter
+- - [ ] Egg
+- - [ ] Emuhost
+
+## Device Support
+
+| Device                  | Status |
+|-------------------------|--------|
+| TinyArcade/PocketArcade | OK |
+| PicoSystem              | XXX FB Format transfers fine, but fails at the first actual framebuffer. |
+| Thumby                  | Future. Should work about the same as PicoSystem. |
+| Playdate                | Future. |
+| Thumby 2                | Awaiting hardware. |
+| PocketStar              | Awaiting hardware. |
+
 ## Protocol
 
 USB-Serial duplex.

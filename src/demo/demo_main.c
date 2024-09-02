@@ -262,6 +262,7 @@ static int demo_main_libless(const char *devpath) {
   
     struct pollfd pollfd={.fd=fd,.events=POLLIN|POLLERR|POLLHUP};
     if (poll(&pollfd,1,0)>0) {
+      fprintf(stderr,"polled\n");
       uint8_t buf[256];
       int bufc=read(fd,buf,sizeof(buf));
       if (bufc<=0) {
@@ -270,6 +271,7 @@ static int demo_main_libless(const char *devpath) {
       }
       int bufp=0;
       while (bufp<bufc) {
+        fprintf(stderr,"  opcode 0x%02x\n",buf[bufp]);
         switch (buf[bufp++]) {
           case 0x00: { // Abort.
               fprintf(stderr,"%s: Explicit abort.\n",devpath);
@@ -279,6 +281,7 @@ static int demo_main_libless(const char *devpath) {
               bufp+=5;
             } break;
           case 0x04: { // Input State.
+              fprintf(stderr,"  input state 0x%02x\n",buf[bufp]);
               demo.instate=buf[bufp++];
             } break;
         }
@@ -286,20 +289,25 @@ static int demo_main_libless(const char *devpath) {
     }
     
     demo_draw(fb,fbw,fbh,stride,pixelsize,pixfmt);
+    if (1) { // XXX Just for now, don't send framebuffers. Investigating why Pico has trouble receiving them.
     uint8_t fbopcode=0x02;
+    fprintf(stderr,"sending framebuffer (1+%d)...\n",fblen);
     if (write(fd,&fbopcode,1)<0) {
       fprintf(stderr,"%s: Write failed: %m\n",devpath);
       close(fd);
       return 1;
     }
+    usleep(50000);
     if (write(fd,fb,fblen)!=fblen) {
       fprintf(stderr,"%s: Write failed: %m\n",devpath);
       close(fd);
       return 1;
     }
+    fprintf(stderr,"...sent\n");
+    }
   
     demo.framec++;
-    usleep(200000); // Aim for about 5 Hz, doesn't need to be precise.
+    usleep(2000000); // Aim for about 5 Hz, doesn't need to be precise.
   }
  _done_:;
   close(fd);
